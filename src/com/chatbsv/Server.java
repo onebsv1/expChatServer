@@ -34,7 +34,7 @@ public class Server {
                     try {
                         line = is.readLine();
                         for (Socket clientSock : clientSockets) {
-                            if(clientSock.isConnected()){
+                            if(clientSock.isConnected() && (clientSock != this.clientSocket)){
                                 PrintStream os = new PrintStream(clientSock.getOutputStream());
                                 if(!line.isEmpty()){
                                     os.println("From Server: " + line);

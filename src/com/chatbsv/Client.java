@@ -19,7 +19,7 @@ public class Client {
     public static void main(String args[]){
 
         Integer clientPort = 24002;
-        String userInput;
+        String userInput="";
 
         try(Socket clientSocket = new Socket()){
 
@@ -38,22 +38,32 @@ public class Client {
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
             PrintStream os = new PrintStream(clientSocket.getOutputStream());
 
+            System.out.print("Client:    ");
 
             while (true){
 
                 while(is.ready()) {
                     System.out.println(is.readLine());
+                    System.out.print("Reply:    ");
+
                 }
 
-                System.out.print("Client:    ");
-
-                if((userInput = stdIn.readLine()) != null) {
+                if(stdIn.ready()) {
+                    userInput = stdIn.readLine();
                     if(userInput.equals("EXIT")){
                         clientSocket.close();
                         exit(0);
                     }
                     os.println(userInput);
                     os.flush();
+                    System.out.print("Client:    ");
+                }
+
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
 
             }
