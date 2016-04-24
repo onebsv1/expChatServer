@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ThreadFactory;
 
 
 /**
@@ -37,7 +38,7 @@ public class Server {
                             if(clientSock.isConnected() && (clientSock != this.clientSocket)){
                                 PrintStream os = new PrintStream(clientSock.getOutputStream());
                                 if(!line.isEmpty()){
-                                    os.println("From Server: " + line);
+                                    os.println(Thread.currentThread().getName()+ ":    " + line);
                                 }
                                 os.flush();
                             }
@@ -95,9 +96,12 @@ public class Server {
         try {
             while (socketThreads.size() < connectionLimit) {
                 Socket clientSocket = serverSocket.accept();
+                BufferedReader is = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                String name = is.readLine();
                 clientSockets.add(clientSocket);
                 socketThreads.add(new Thread(new serverThread(clientSocket,clientSockets)));
                 clientSockThread.put(socketThreads.getLast(), clientSocket);
+                socketThreads.getLast().setName(name);
                 socketThreads.getLast().start();
             }
         } catch (IOException e) {
@@ -123,9 +127,12 @@ public class Server {
 
             for (int i=0; i < connectionLimit; i++){
                 Socket clientSocket = serverSocket.accept();
+                BufferedReader is = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                String name = is.readLine();
                 clientSockets.add(clientSocket);
                 socketThreads.add(new Thread(new serverThread(clientSocket,clientSockets)));
                 clientSockThread.put(socketThreads.getLast(),clientSocket);
+                socketThreads.getLast().setName(name);
                 socketThreads.getLast().start();
             }
 

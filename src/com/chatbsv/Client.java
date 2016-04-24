@@ -8,6 +8,8 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 
 import static java.lang.System.exit;
 
@@ -38,6 +40,12 @@ public class Client {
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
             PrintStream os = new PrintStream(clientSocket.getOutputStream());
 
+            System.out.println("Enter name:    ");
+            String nom = stdIn.readLine();
+            String[] textArray = nom.split(" ");
+            os.println(textArray[0]);
+            os.flush();
+
             System.out.print("Client:    ");
 
             while (true){
@@ -49,6 +57,7 @@ public class Client {
                 }
 
                 if(stdIn.ready()) {
+                    System.out.print("Client:    ");
                     userInput = stdIn.readLine();
                     if(userInput.equals("EXIT")){
                         clientSocket.close();
@@ -56,7 +65,7 @@ public class Client {
                     }
                     os.println(userInput);
                     os.flush();
-                    System.out.print("Client:    ");
+
                 }
 
             }
