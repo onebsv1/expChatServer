@@ -59,13 +59,6 @@ public class Client {
                     System.out.print("Client:    ");
                 }
 
-
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
             }
 
         } catch (IOException e){
