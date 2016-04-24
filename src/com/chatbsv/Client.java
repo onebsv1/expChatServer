@@ -19,7 +19,7 @@ public class Client {
     public static void main(String args[]){
 
         Integer clientPort = 24002;
-        String userInput="";
+        String userInput;
 
         try(Socket clientSocket = new Socket()){
 
